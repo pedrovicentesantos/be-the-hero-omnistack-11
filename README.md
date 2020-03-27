@@ -1,6 +1,7 @@
 # Projeto
 
-Criação de uma aplicação chamada Be the Hero. Feito baseado no conteúdo da Semana OmniStack 11.
+Criação de uma aplicação chamada Be the Hero. A aplicação tem como objetivo permitir que ONGs cadastrem casos e encontrem pessoas dispostas a ajudar. 
+Feita baseada no conteúdo da Semana OmniStack 11.
 
 ## Tecnologias
 
@@ -10,3 +11,4 @@ Criação de uma aplicação chamada Be the Hero. Feito baseado no conteúdo da 
 - React Native para a aplicação mobile
   * Uso do Expo para facilitar a criação do app mobile
 - Banco de Dados SQLite para persistir os dados
+- Testes unitários e de integração utilizando Jest e Supertest
