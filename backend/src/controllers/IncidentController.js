@@ -41,6 +41,8 @@ module.exports = {
     return response.json({ id });
   },
 
+  // TODO:
+  // Checar se o incidente existe
   async delete(request,response) {
     const { id } = request.params;
     const ong_id = request.headers.authorization;
