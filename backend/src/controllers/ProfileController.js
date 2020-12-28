@@ -8,6 +8,10 @@ module.exports = {
       .where('ong_id', ong_id)
       .select('*');
     
-      return response.json(incidents);
+    if (incidents.length > 0) {
+      return response.status(200).json(incidents);
+    }
+
+    return response.status(400).json({error: "Ong doesn't exists"})
   },
 }

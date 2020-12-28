@@ -18,12 +18,18 @@ export default function Profile() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await api.get('profile', {
-        headers: {
-          Authorization: ongId,
-        }
-      });
-      setIncidents(response.data);
+      try {
+        const response = await api.get('profile', {
+          headers: {
+            Authorization: ongId,
+          }
+        });
+
+        setIncidents(response.data);
+
+      } catch (err) {
+        alert(err.response.data);
+      }
     }
     fetchData();
   }, [ongId]);
