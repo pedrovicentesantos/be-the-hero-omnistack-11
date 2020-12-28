@@ -19,13 +19,13 @@ export default function Logon() {
 
     try {
       const response = await api.post('sessions', { id });
-
+      
       localStorage.setItem('ongId', id);
       localStorage.setItem('ongName', response.data.name);
 
       history.push('/profile');
     } catch (err) {
-      alert('Falha no login, tente novamente.')
+      alert(err.response.data.error);
     }
   }
 
