@@ -41,8 +41,6 @@ module.exports = {
     return response.json({ id });
   },
 
-  // TODO:
-  // Checar se o incidente existe
   async delete(request,response) {
     const { id } = request.params;
     const ong_id = request.headers.authorization;
@@ -53,11 +51,14 @@ module.exports = {
       .first();
 
     if (incident.ong_id !== ong_id) {
-      return response.status(401).json({ error: 'Operation not permited'});
+      return response.status(401).json({ error: 'Operation not permitted'});
     }
 
-    await connection('incidents').where('id',id).delete();
+    const rows = await connection('incidents').where('id',id).delete();
+    if (rows > 0) {
+      return response.status(204).send();
+    }
 
-    return response.status(204).send();
+    return response.status(400).json({ error: 'Error when deleting'});
   },
 };
