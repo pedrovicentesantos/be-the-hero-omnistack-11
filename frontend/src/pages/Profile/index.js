@@ -25,10 +25,14 @@ export default function Profile() {
           }
         });
 
-        setIncidents(response.data);
-
+        if (response.status === 200) {
+          setIncidents(response.data);
+        }
+        
       } catch (err) {
-        alert(err.response.data);
+        if (err.response.data.status !== 204) {
+          alert(err.response.data.error);
+        }
       }
     }
     fetchData();
