@@ -38,7 +38,12 @@ module.exports = {
       ong_id,
     });
 
-    return response.json({ id });
+    if (id >= 0) {
+      return response.status(200).json({ id });
+    }
+
+    return response.status(400).json({error: "Error saving incident"});
+
   },
 
   async delete(request,response) {

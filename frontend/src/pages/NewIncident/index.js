@@ -36,7 +36,7 @@ export default function NewIncident() {
       history.push('/profile');
 
     } catch (err) {
-      alert('Erro ao cadastrar caso, tente novamente.');
+      alert(err.response.data.error);
     }
   }
 
@@ -60,12 +60,14 @@ export default function NewIncident() {
             type="text" 
             placeholder="Título do caso" 
             value={title}
-            onChange={e => setTitle(e.target.value)}           
+            onChange={e => setTitle(e.target.value)}      
+            required     
           />
           <textarea 
             placeholder="Descrição"
             value={description}
             onChange={e => setDescription(e.target.value)}
+            required
           >
           </textarea>
           <input 
@@ -73,6 +75,7 @@ export default function NewIncident() {
             placeholder="Valor em reais"
             value={value}
             onChange={e => setValue(e.target.value)}
+            required
           />
 
           <button className="button" type="submit">

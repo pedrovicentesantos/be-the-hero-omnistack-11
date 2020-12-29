@@ -11,9 +11,9 @@ module.exports = {
     if (incidents.length > 0) {
       return response.status(200).json(incidents);
     } else if (incidents.length === 0) {
-      return response.status(204).json({message: "Ong doesn't have any incident yet"});
+      return response.status(204).json({message: "Ong doesn't have any incidents yet"});
     }
 
-    return response.status(400).json({error: "Ong doesn't exist"})
+    return response.status(400).json({error: "Ong doesn't exist"});
   },
 }
