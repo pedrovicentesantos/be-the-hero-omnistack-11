@@ -12,18 +12,24 @@ import heroesImg  from '../../assets/heroes.png';
 
 export default function Logon() {
   const [id, setId] = useState('');
+  const [error, setError] = useState('');
   const history = useHistory();
 
   async function handleLogin(e) {
     e.preventDefault();
 
     try {
-      const response = await api.post('sessions', { id });
-      
-      localStorage.setItem('ongId', id);
-      localStorage.setItem('ongName', response.data.name);
-
-      history.push('/profile');
+      if (!id) {
+        setError("Favor entrar com um ID");
+      } else {
+        setError("");
+        const response = await api.post('sessions', { id });
+        
+        localStorage.setItem('ongId', id);
+        localStorage.setItem('ongName', response.data.name);
+  
+        history.push('/profile');
+      }
     } catch (err) {
       alert(err.response.data.error);
     }
@@ -44,7 +50,7 @@ export default function Logon() {
             onChange={e => setId(e.target.value)}
           />
           <button className="button" type="submit">Entrar</button>
-
+          {error.length > 3 && <h3 className="error-message">{error}</h3>}
           <Link className="back-link" to="/register">
             <FiLogIn size={16} color="#E02041"/>
             Não tenho cadastro
