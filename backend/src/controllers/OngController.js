@@ -13,7 +13,7 @@ module.exports = {
 
     const id = generateUniqueId();
 
-    await connection('ongs').insert({
+    const resp = await connection('ongs').insert({
       id,
       name,
       email,
@@ -22,6 +22,10 @@ module.exports = {
       uf,
     });
 
-    return response.json({id});
+    if (resp >= 0) {
+      return response.status(200).json({id});
+    }
+    
+    return response.status(400).json({error: "Erro ao salvar ONG"});
   }
 }
