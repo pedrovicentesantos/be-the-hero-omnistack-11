@@ -66,4 +66,34 @@ module.exports = {
 
     return response.status(400).json({ error: 'Error when deleting'});
   },
+
+  async update(request, response) {
+    const { id } = request.params;
+    const ong_id = request.headers.authorization;
+
+    const { title, description, value } = request.body;
+
+    const incident = await connection('incidents')
+      .where('id', id)
+      .select('ong_id')
+      .first();
+
+    if (incident.ong_id !== ong_id) {
+      return response.status(401).json({ error: 'Operation not permitted'});
+    }
+
+    const row = await connection('incidents')
+      .where('id', id)
+      .update( {
+        title,
+        description,
+        value
+      });
+
+    if (row > 0) {
+      return response.status(204).send();
+    }
+
+    return response.status(400).json({ error: 'Error when updating'});
+  }
 };

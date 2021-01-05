@@ -44,4 +44,6 @@ routes.delete('/incidents/:id', celebrate({
   })
 }), IncidentController.delete);
 
+routes.patch('/incidents/:id', IncidentController.update);
+
 module.exports = routes;
