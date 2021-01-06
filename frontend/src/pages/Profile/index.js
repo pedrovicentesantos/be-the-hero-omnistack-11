@@ -100,9 +100,9 @@ export default function Profile() {
         {incidents.map(incident => (
           <li key={incident.id}>
             <strong>CASO:</strong>
-            <div className="incident-title">
+            <div className="editable-container">
               {isEditing ?  (
-                <div className="editable">
+                <div className="editable-input-block">
                   <input
                     type="text"
                     
@@ -119,7 +119,6 @@ export default function Profile() {
                 <p onClick={() => setIsEditing(true)}>{incident.title}</p>
               )
               }
-            {/* <p>{incident.title}</p> */}
             </div>
 
             <strong>DESCRIÇÃO:</strong>
