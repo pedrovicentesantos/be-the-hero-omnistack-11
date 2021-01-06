@@ -11,9 +11,11 @@ import './style.css';
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [editingTitle, setEditingTitle] = useState(false);
+  const [editingValue, setEditingValue] = useState(false);
 
   const titleRef = useRef();
+  const valueRef = useRef();
 
   const history = useHistory();
 
@@ -73,7 +75,27 @@ export default function Profile() {
     } catch (err) {
       alert(err.response.data.error);
     }
-    setIsEditing(false);
+    setEditingTitle(false);
+  }
+
+  async function handleEditIncidentValue (id) {
+    try {
+      const value = valueRef.current.value;
+      await api.patch(`incidents/${id}`, {value}, {
+        headers : {
+          Authorization: ongId
+        }
+      });
+      setIncidents(incidents.map(incident => {
+        if (incident.id === id) {
+          incident.value = value;  
+        }
+        return incident
+      }))
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+    setEditingValue(false);
   }
 
   function handleLogout() {
@@ -101,22 +123,21 @@ export default function Profile() {
           <li key={incident.id}>
             <strong>CASO:</strong>
             <div className="editable-container">
-              {isEditing ?  (
+              {editingTitle ?  (
                 <div className="editable-input-block">
                   <input
-                    type="text"
-                    
+                    type="text" 
                     ref={titleRef}
                     defaultValue={incident.title}
                   />
                   <button
-                    onClick={ (e) => handleEditIncidentTitle(incident.id) }
+                    onClick={ () => handleEditIncidentTitle(incident.id) }
                   >
                     <FiCheck size={20} color="green"/>
                   </button>
                 </div>
               ) : (
-                <p onClick={() => setIsEditing(true)}>{incident.title}</p>
+                <p onClick={() => setEditingTitle(true)}>{incident.title}</p>
               )
               }
             </div>
@@ -125,11 +146,35 @@ export default function Profile() {
             <p>{incident.description}</p>
 
             <strong>VALOR:</strong>
-            <p>{Intl.NumberFormat(
+            <div className="editable-container">
+              {editingValue ?  (
+                <div className="editable-input-block">
+                  <input
+                    type="text"
+                    ref={valueRef}
+                    defaultValue={incident.value}
+                  />
+                  <button
+                    onClick={ () => handleEditIncidentValue(incident.id) }
+                  >
+                    <FiCheck size={20} color="green"/>
+                  </button>
+                </div>
+              ) : (
+                <p onClick={() => setEditingValue(true)}>
+                  {Intl.NumberFormat(
+                    'pt-BR', 
+                    { style: 'currency', currency: 'BRL'})
+                    .format(incident.value)}
+                </p>
+              )
+              }
+            </div>
+            {/* <p>{Intl.NumberFormat(
               'pt-BR', 
               { style: 'currency', currency: 'BRL'})
               .format(incident.value)}
-            </p>
+            </p> */}
 
             <button 
               className="delete-button" 
