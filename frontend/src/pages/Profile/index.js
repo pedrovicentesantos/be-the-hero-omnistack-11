@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiPower,FiTrash2 } from 'react-icons/fi';
+import { FiCheck, FiPower,FiTrash2 } from 'react-icons/fi';
 
 import api from '../../services/api';
 
@@ -10,6 +10,10 @@ import './style.css';
 
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const titleRef = useRef();
 
   const history = useHistory();
 
@@ -52,6 +56,26 @@ export default function Profile() {
     }
   }
 
+  async function handleEditIncidentTitle (id) {
+    try {
+      const title = titleRef.current.value;
+      await api.patch(`incidents/${id}`, {title}, {
+        headers : {
+          Authorization: ongId
+        }
+      });
+      setIncidents(incidents.map(incident => {
+        if (incident.id === id) {
+          incident.title = title;  
+        }
+        return incident
+      }))
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+    setIsEditing(false);
+  }
+
   function handleLogout() {
     localStorage.clear();
 
@@ -76,7 +100,27 @@ export default function Profile() {
         {incidents.map(incident => (
           <li key={incident.id}>
             <strong>CASO:</strong>
-            <p>{incident.title}</p>
+            <div className="incident-title">
+              {isEditing ?  (
+                <div className="editable">
+                  <input
+                    type="text"
+                    
+                    ref={titleRef}
+                    defaultValue={incident.title}
+                  />
+                  <button
+                    onClick={ (e) => handleEditIncidentTitle(incident.id) }
+                  >
+                    <FiCheck size={20} color="green"/>
+                  </button>
+                </div>
+              ) : (
+                <p onClick={() => setIsEditing(true)}>{incident.title}</p>
+              )
+              }
+            {/* <p>{incident.title}</p> */}
+            </div>
 
             <strong>DESCRIÇÃO:</strong>
             <p>{incident.description}</p>
@@ -88,7 +132,11 @@ export default function Profile() {
               .format(incident.value)}
             </p>
 
-            <button onClick={() => handleDeleteIncident(incident.id)} type="button">
+            <button 
+              className="delete-button" 
+              onClick={() => handleDeleteIncident(incident.id)} 
+              type="button"
+            >
               <FiTrash2 size={20} color="A8A8B3" />
             </button>
           </li>
