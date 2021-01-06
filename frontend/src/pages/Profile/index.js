@@ -13,9 +13,11 @@ export default function Profile() {
 
   const [editingTitle, setEditingTitle] = useState(false);
   const [editingValue, setEditingValue] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
 
   const titleRef = useRef();
   const valueRef = useRef();
+  const descriptionRef = useRef();
 
   const history = useHistory();
 
@@ -76,6 +78,26 @@ export default function Profile() {
       alert(err.response.data.error);
     }
     setEditingTitle(false);
+  }
+
+  async function handleEditIncidentDescription (id) {
+    try {
+      const description = descriptionRef.current.value;
+      await api.patch(`incidents/${id}`, {description}, {
+        headers : {
+          Authorization: ongId
+        }
+      });
+      setIncidents(incidents.map(incident => {
+        if (incident.id === id) {
+          incident.description = description;  
+        }
+        return incident
+      }))
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+    setEditingDescription(false);
   }
 
   async function handleEditIncidentValue (id) {
@@ -143,7 +165,26 @@ export default function Profile() {
             </div>
 
             <strong>DESCRIÇÃO:</strong>
-            <p>{incident.description}</p>
+            <div className="editable-container">
+              {editingDescription ?  (
+                <div className="editable-input-block">
+                  <textarea
+                    ref={descriptionRef}
+                    defaultValue={incident.description}
+                    rows="5" 
+                    cols="33"
+                  />
+                  <button
+                    onClick={ () => handleEditIncidentDescription(incident.id) }
+                  >
+                    <FiCheck size={20} color="green"/>
+                  </button>
+                </div>
+              ) : (
+                <p onClick={() => setEditingDescription(true)}>{incident.description}</p>
+              )
+              }
+            </div>
 
             <strong>VALOR:</strong>
             <div className="editable-container">
@@ -170,11 +211,6 @@ export default function Profile() {
               )
               }
             </div>
-            {/* <p>{Intl.NumberFormat(
-              'pt-BR', 
-              { style: 'currency', currency: 'BRL'})
-              .format(incident.value)}
-            </p> */}
 
             <button 
               className="delete-button" 

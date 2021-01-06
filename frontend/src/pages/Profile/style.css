@@ -97,17 +97,6 @@
   color: #41414D;
 }
 
-.profile-container ul li p + strong {
-  margin-top: 32px;
-}
-
-.profile-container ul li p {
-   color: #737380;
-   line-height: 21px;
-   font-size: 16px;
-}
-
-/* Para o div do título */
 .editable-container > p {
   color: #737380;
   line-height: 21px;
@@ -121,6 +110,14 @@
 
 .editable-container + strong {
   margin-top: 32px;
+}
+
+.editable-container textarea {
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
 }
 
 div.editable-input-block {
