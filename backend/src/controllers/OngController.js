@@ -1,5 +1,6 @@
 const generateUniqueId = require('../utils/generateUniqueId');
 const connection = require('../database/connection');
+const { destroy } = require('../database/connection');
 
 module.exports = {
   async index(request,response) {
@@ -27,5 +28,25 @@ module.exports = {
     }
     
     return response.status(400).json({error: "Erro ao salvar ONG"});
+  },
+
+  async destroy(request, response) {
+    const ong_id = request.headers.authorization;
+
+    const ong = await connection('ongs').where('id', ong_id).first();
+    
+    if (ong) {
+
+      const row = await connection('ongs').where('id', ong_id).delete();
+  
+      if (row > 0) {
+        return response.status(204).send();
+      }
+  
+      return response.status(400).json({ error: 'Error when deleting'});
+    } 
+    
+    return response.status(404).json({ error: 'ONG não existe'});
+
   }
 }

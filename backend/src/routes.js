@@ -22,6 +22,7 @@ routes.post('/ongs', celebrate({
     uf: Joi.string().required().length(2),
   })
 }), OngController.create);
+routes.delete('/ongs', OngController.destroy);
 
 routes.get('/profile', celebrate({
   [Segments.HEADERS]: Joi.object({
