@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiPower,FiTrash2 } from 'react-icons/fi';
+import { FiPower,FiTrash2, FiEdit } from 'react-icons/fi';
 
 import api from '../../services/api';
 
@@ -86,6 +86,9 @@ export default function Profile() {
       <header>
         <img src={logoImg} alt="Be the Hero"/>
         <span>Bem vinda, {ongName}</span>
+        <Link className="edit-button" to="profile/edit">
+          <FiEdit size={25} color="#bc9604" />
+        </Link>
 
         <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
         <button onClick={handleLogout} type="button">

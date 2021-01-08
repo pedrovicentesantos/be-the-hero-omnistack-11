@@ -21,10 +21,18 @@
   height: 64px;
 }
 
-.profile-container header a {
+.profile-container header .button {
   width: 260px;
   margin-left: auto;
   margin-top: 0;
+}
+
+.profile-container .edit-button {
+  height: 60px;
+  width:  60px;
+  
+  margin-left: 16px;
+  padding-top: 15px;
 }
 
 .profile-container header button {
@@ -76,20 +84,9 @@
   border: 0;
 }
 
-/* .profile-container ul li button {
-  position: absolute;
-  right: 24px;
-  top: 24px;
-
-  border: 0;
-} */
-
 .delete-button:hover {
   opacity: 0.8;
 }
-/* .profile-container ul li button:hover {
-  opacity: 0.8;
-} */
 
 .profile-container ul li strong {
   display: block;
