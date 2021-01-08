@@ -37,13 +37,23 @@ module.exports = {
     
     if (ong) {
 
-      const row = await connection('ongs').where('id', ong_id).delete();
-  
-      if (row > 0) {
-        return response.status(204).send();
-      }
-  
-      return response.status(400).json({ error: 'Error when deleting'});
+      const incidents = await connection('incidents')
+      .where('ong_id', ong_id)
+      .delete();
+
+      if (incidents > 0) {
+        
+        const row = await connection('ongs').where('id', ong_id).delete();
+    
+        if (row > 0) {
+          return response.status(204).send();
+        }
+    
+        return response.status(400).json({ error: 'Error when deleting'});
+      } 
+
+      return response.status(406).json({ error: 'Erro ao deletar os incidentes da ONG' })
+
     } 
     
     return response.status(404).json({ error: 'ONG não existe'});
