@@ -1,0 +1,33 @@
+.editable-container > p {
+  color: #737380;
+  line-height: 21px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.editable-container > p:hover {
+  font-style: italic;
+}
+
+.editable-container + strong {
+  margin-top: 32px;
+}
+
+.editable-container textarea {
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 1px 1px 1px #999;
+}
+
+div.editable-input-block {
+  display: flex;
+}
+
+div.editable-input-block button {
+  border: none;
+  background: none;
+  margin-left: 5px;
+  cursor: pointer;
+}

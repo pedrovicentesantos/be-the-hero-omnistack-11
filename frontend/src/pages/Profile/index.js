@@ -1,23 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiCheck, FiPower,FiTrash2 } from 'react-icons/fi';
+import { FiPower,FiTrash2 } from 'react-icons/fi';
 
 import api from '../../services/api';
 
 import logoImg from '../../assets/logo.svg';
 
+import Editable from '../../components/Editable';
+
 import './style.css';
 
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
-
-  const [editingTitle, setEditingTitle] = useState(false);
-  const [editingValue, setEditingValue] = useState(false);
-  const [editingDescription, setEditingDescription] = useState(false);
-
-  const titleRef = useRef();
-  const valueRef = useRef();
-  const descriptionRef = useRef();
 
   const history = useHistory();
 
@@ -60,64 +54,25 @@ export default function Profile() {
     }
   }
 
-  async function handleEditIncidentTitle (id) {
+  async function handleEditIncident (id, data, dataType) {
     try {
-      const title = titleRef.current.value;
-      await api.patch(`incidents/${id}`, {title}, {
+      await api.patch(`incidents/${id}`, { [dataType]: data }, {
         headers : {
           Authorization: ongId
         }
       });
-      setIncidents(incidents.map(incident => {
-        if (incident.id === id) {
-          incident.title = title;  
-        }
-        return incident
-      }))
-    } catch (err) {
-      alert(err.response.data.error);
-    }
-    setEditingTitle(false);
-  }
 
-  async function handleEditIncidentDescription (id) {
-    try {
-      const description = descriptionRef.current.value;
-      await api.patch(`incidents/${id}`, {description}, {
-        headers : {
-          Authorization: ongId
-        }
-      });
       setIncidents(incidents.map(incident => {
         if (incident.id === id) {
-          incident.description = description;  
+          incident[dataType] = data;
         }
         return incident
-      }))
-    } catch (err) {
-      alert(err.response.data.error);
-    }
-    setEditingDescription(false);
-  }
+      }));
 
-  async function handleEditIncidentValue (id) {
-    try {
-      const value = valueRef.current.value;
-      await api.patch(`incidents/${id}`, {value}, {
-        headers : {
-          Authorization: ongId
-        }
-      });
-      setIncidents(incidents.map(incident => {
-        if (incident.id === id) {
-          incident.value = value;  
-        }
-        return incident
-      }))
     } catch (err) {
       alert(err.response.data.error);
     }
-    setEditingValue(false);
+    
   }
 
   function handleLogout() {
@@ -145,73 +100,37 @@ export default function Profile() {
           <li key={incident.id}>
             <strong>CASO:</strong>
             <div className="editable-container">
-              {editingTitle ?  (
-                <div className="editable-input-block">
-                  <input
-                    type="text" 
-                    ref={titleRef}
-                    defaultValue={incident.title}
-                  />
-                  <button
-                    onClick={ () => handleEditIncidentTitle(incident.id) }
-                  >
-                    <FiCheck size={20} color="green"/>
-                  </button>
-                </div>
-              ) : (
-                <p onClick={() => setEditingTitle(true)}>{incident.title}</p>
-              )
-              }
+              <Editable 
+                onEditIncident={handleEditIncident} 
+                id={incident.id} 
+                data={incident.title} 
+                dataType="title" 
+                inputType="input"
+              />
             </div>
-
+            
             <strong>DESCRIÇÃO:</strong>
             <div className="editable-container">
-              {editingDescription ?  (
-                <div className="editable-input-block">
-                  <textarea
-                    ref={descriptionRef}
-                    defaultValue={incident.description}
-                    rows="5" 
-                    cols="33"
-                  />
-                  <button
-                    onClick={ () => handleEditIncidentDescription(incident.id) }
-                  >
-                    <FiCheck size={20} color="green"/>
-                  </button>
-                </div>
-              ) : (
-                <p onClick={() => setEditingDescription(true)}>{incident.description}</p>
-              )
-              }
+              <Editable 
+                onEditIncident={handleEditIncident} 
+                id={incident.id} 
+                data={incident.description} 
+                dataType="description" 
+                inputType="textArea"
+              />
             </div>
-
+            
             <strong>VALOR:</strong>
             <div className="editable-container">
-              {editingValue ?  (
-                <div className="editable-input-block">
-                  <input
-                    type="text"
-                    ref={valueRef}
-                    defaultValue={incident.value}
-                  />
-                  <button
-                    onClick={ () => handleEditIncidentValue(incident.id) }
-                  >
-                    <FiCheck size={20} color="green"/>
-                  </button>
-                </div>
-              ) : (
-                <p onClick={() => setEditingValue(true)}>
-                  {Intl.NumberFormat(
-                    'pt-BR', 
-                    { style: 'currency', currency: 'BRL'})
-                    .format(incident.value)}
-                </p>
-              )
-              }
+              <Editable 
+                onEditIncident={handleEditIncident} 
+                id={incident.id} 
+                data={incident.value} 
+                dataType="value" 
+                inputType="input"
+              />
             </div>
-
+            
             <button 
               className="delete-button" 
               onClick={() => handleDeleteIncident(incident.id)} 
