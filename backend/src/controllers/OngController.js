@@ -1,6 +1,5 @@
 const generateUniqueId = require('../utils/generateUniqueId');
 const connection = require('../database/connection');
-const { destroy } = require('../database/connection');
 
 module.exports = {
   async index(request,response) {
@@ -52,7 +51,7 @@ module.exports = {
       .where('ong_id', ong_id)
       .delete();
 
-      if (incidents > 0) {
+      if (incidents >= 0) {
         
         const row = await connection('ongs').where('id', ong_id).delete();
     

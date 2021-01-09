@@ -1,21 +1,60 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link, useHistory } from 'react-router-dom';
 
 import { FiArrowLeft } from 'react-icons/fi';
+
+import api from '../../services/api';
 
 import logoImg from '../../assets/logo.svg';
 
 import './style.css';
 
 export default function EditOng () {
-
   const ongId = localStorage.getItem('ongId');
-  const ongName = localStorage.getItem('ongName');
+
+  const history = useHistory();
+
+  const [ong, setOng] = useState({});
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get('self', {
+          headers: {
+            Authorization: ongId,
+          }
+        });
 
+        if (response.status === 200) {
+          setOng(response.data);
+        }
+        
+      } catch (err) {
+        alert(err.response.data.error);
+      }
+    }
+
+    fetchData();
   }, []);
+
+  async function handleDeleteOng () {
+    try {
+      const response = await api.delete('ongs', {
+        headers: {
+          Authorization: ongId,
+        }
+      });
+
+      if (response.status === 204) {
+        localStorage.clear();
+
+        history.push('/');
+      }
+    } catch (err) {
+      alert(err.response.data.error);
+    }
+  }
 
   return (
     <div className="edit-ong-container">
@@ -32,33 +71,52 @@ export default function EditOng () {
           </Link>
         </section>
 
-        {/* <form onSubmit={handleNewIncident}>
+        <form >
           <input 
             type="text" 
-            placeholder="Título do caso" 
-            value={title}
-            onChange={e => setTitle(e.target.value)}      
-            required     
-          />
-          <textarea 
-            placeholder="Descrição"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
+            placeholder="Nome da ONG"
+            value={ong.name}
             required
-          >
-          </textarea>
+          />
+          <input 
+            type="email" 
+            placeholder="Email"
+            value={ong.email}
+            required
+          />
           <input 
             type="text" 
-            placeholder="Valor em reais"
-            value={value}
-            onChange={e => setValue(e.target.value)}
+            placeholder="Whatsapp"
+            value={ong.whatsapp}
             required
           />
 
-          <button className="button" type="submit">
-            Cadastrar
-          </button>
-        </form> */}
+          <div className="input-group">
+            <input 
+              type="text" 
+              placeholder="Cidade"
+              value={ong.city}
+              required
+            />
+            <input 
+              type="text" 
+              placeholder="UF" 
+              minLength={2}
+              maxLength={2}
+              style={{ width:80 }}
+              value={ong.uf}
+              required
+            />
+          </div>
+          <div className="buttons">
+            <button id="save-button" type="submit">
+              Salvar
+            </button>
+            <button onClick={handleDeleteOng} id="delete-button" type="button">
+              Deletar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

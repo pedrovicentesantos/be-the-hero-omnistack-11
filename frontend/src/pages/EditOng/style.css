@@ -10,6 +10,23 @@
   justify-content: center;
 }
 
+.edit-ong-container .content {
+  width: 100%;
+
+  padding: 96px;
+
+  background: #F0F0F5;
+
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+
+  border-radius: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
 .edit-ong-container .content section {
   width: 100%;
   max-width: 380px;
@@ -36,4 +53,86 @@
 .edit-ong-container .content form input,
 .edit-ong-container .content form textarea {
   margin-top: 8px;
+}
+
+.edit-ong-container .content form {
+  width: 100%;
+  max-width: 450px;
+}
+
+.edit-ong-container .content form input {
+  margin-top: 8px;
+}
+
+.edit-ong-container .content form .input-group {
+  display: flex;
+}
+
+.edit-ong-container .content form .input-group input + input {
+  margin-left: 8px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+
+  margin-top: 10px;
+}
+
+#save-button {
+  width: 50%;
+  height: 60px;
+
+  background: #007a4e;
+
+  border: 0;
+  border-radius: 8px;
+
+  color: #FFF;
+
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 60px;
+
+  margin-top: 16px;
+  
+  display: inline-block;
+
+  text-align: center;
+  text-decoration: none;
+
+  transition: filter 0.2s;
+}
+
+#save-button:hover {
+  filter: brightness(90%);
+}
+
+#delete-button {
+  width: 40%;
+  height: 60px;
+
+  background: #E02041;
+
+  border: 0;
+  border-radius: 8px;
+
+  color: #FFF;
+
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 60px;
+
+  margin-top: 16px;
+  
+  display: inline-block;
+
+  text-align: center;
+  text-decoration: none;
+
+  transition: filter 0.2s;
+}
+
+#delete-button:hover {
+  filter: brightness(90%);
 }
