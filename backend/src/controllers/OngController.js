@@ -8,6 +8,17 @@ module.exports = {
   
     return response.json(ongs);
   },
+
+  async show (request, response) {
+    const ong_id = request.headers.authorization;
+
+    const ong = await connection('ongs').where('id', ong_id).first();
+  
+    if (ong) {
+      return response.status(200).json(ong);
+    }
+    return response.status(404).json({error: "ONG não existe"});
+  },
   
   async create(request,response) {
     const { name, email, whatsapp, city, uf } = request.body;

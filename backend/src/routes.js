@@ -24,6 +24,8 @@ routes.post('/ongs', celebrate({
 }), OngController.create);
 routes.delete('/ongs', OngController.destroy);
 
+routes.get('/self', OngController.show);
+
 routes.get('/profile', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.string().required(),
