@@ -36,7 +36,7 @@ export default function EditOng () {
     }
 
     fetchData();
-  }, []);
+  }, [ongId]);
 
   async function handleDeleteOng () {
     try {
@@ -74,19 +74,16 @@ export default function EditOng () {
         <form >
           <input 
             type="text" 
-            placeholder="Nome da ONG"
             value={ong.name}
             required
           />
           <input 
             type="email" 
-            placeholder="Email"
             value={ong.email}
             required
           />
           <input 
             type="text" 
-            placeholder="Whatsapp"
             value={ong.whatsapp}
             required
           />
@@ -94,13 +91,11 @@ export default function EditOng () {
           <div className="input-group">
             <input 
               type="text" 
-              placeholder="Cidade"
               value={ong.city}
               required
             />
             <input 
               type="text" 
-              placeholder="UF" 
               minLength={2}
               maxLength={2}
               style={{ width:80 }}
