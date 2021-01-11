@@ -24,6 +24,7 @@ routes.post('/ongs', celebrate({
 }), OngController.create);
 routes.delete('/ongs', OngController.destroy);
 
+routes.patch('/ongs', OngController.update);
 routes.get('/self', OngController.show);
 
 routes.get('/profile', celebrate({

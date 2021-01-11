@@ -1,5 +1,7 @@
 const generateUniqueId = require('../utils/generateUniqueId');
 const connection = require('../database/connection');
+const { response } = require('express');
+const { on } = require('../database/connection');
 
 module.exports = {
   async index(request,response) {
@@ -68,5 +70,33 @@ module.exports = {
     
     return response.status(404).json({ error: 'ONG não existe'});
 
+  },
+
+  async update(request, response) {
+    const ong_id = request.headers.authorization;
+
+    const { name, email, whatsapp, city, uf } = request.body;
+
+    const row = await connection('ongs')
+      .where('id', ong_id)
+      .update( {
+        name,
+        email,
+        whatsapp,
+        city,
+        uf
+      });
+
+    if (row > 0) {
+      const ong = await connection('ongs')
+      .select('*')
+      .where('id', ong_id)
+      .first();
+      if (ong) {
+        return response.status(200).json(ong);
+      }
+    }
+
+    return response.status(400).json({ error: 'Error when updating'});
   }
 }
