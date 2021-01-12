@@ -62,7 +62,7 @@ export default function EditOng () {
         localStorage.clear();
         localStorage.setItem('ongId', response.data.id);
         localStorage.setItem('ongName', response.data.name);
-        setOng(response.data);
+        // setOng(response.data);
       }
 
     } catch (err) {
