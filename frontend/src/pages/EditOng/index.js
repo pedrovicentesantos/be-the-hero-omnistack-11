@@ -58,11 +58,10 @@ export default function EditOng () {
       });
 
       if (response.status === 200) {
-        history.push('/profile');
         localStorage.clear();
         localStorage.setItem('ongId', response.data.id);
         localStorage.setItem('ongName', response.data.name);
-        // setOng(response.data);
+        history.push('/profile');
       }
 
     } catch (err) {
