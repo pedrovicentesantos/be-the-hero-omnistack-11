@@ -8,7 +8,7 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
   const [editing, setEditing] = useState(false);
   const [editableData, setEditableData] = useState(data);
 
-  async function handleEdit () {
+  async function handleEdit (e) {
     try {
       await onEditIncident(id, editableData, dataType);
     } catch (err) {
@@ -17,6 +17,19 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
     setEditing(false);
   }
 
+  async function handleKey (e) {
+    if (e.key === 'Enter') {
+      await handleEdit(e);
+    }
+  }
+
+  async function handleKeyTextArea (e) {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      await handleEdit(e);
+    }
+  }
+  
+
   if (editing && inputType === 'input') {
     return (
       <div className="editable-input-block">
@@ -24,6 +37,7 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
           type="text" 
           value={editableData}
           onChange={(e) => {setEditableData(e.target.value)}}
+          onKeyUp={handleKey}
         />
 
         <button onClick={handleEdit}>
@@ -39,10 +53,11 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
           rows="5" 
           cols="33"
           onChange={(e) => {setEditableData(e.target.value)}}
+          onKeyUp={handleKeyTextArea}
         />
 
         <button
-          onClick={ handleEdit }
+          onClick={handleEdit}
         >
           <FiCheck size={20} color="green"/>
         </button>
