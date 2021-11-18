@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { FiPower,FiTrash2, FiEdit } from 'react-icons/fi';
-
+import { FiPower, FiEdit } from 'react-icons/fi';
+import Incident from '../../components/Incident'
 import api from '../../services/api';
-
 import logoImg from '../../assets/logo.svg';
-
-import Editable from '../../components/Editable';
-
 import './style.css';
 
 export default function Profile() {
@@ -72,12 +68,10 @@ export default function Profile() {
     } catch (err) {
       alert(err.response.data.error);
     }
-    
   }
 
   function handleLogout() {
     localStorage.clear();
-
     history.push('/');
   }
 
@@ -100,48 +94,12 @@ export default function Profile() {
 
       <ul>
         {incidents.map(incident => (
-          <li key={incident.id}>
-            <strong>CASO:</strong>
-            <div className="editable-container">
-              <Editable 
-                onEditIncident={handleEditIncident} 
-                id={incident.id} 
-                data={incident.title} 
-                dataType="title" 
-                inputType="input"
-              />
-            </div>
-            
-            <strong>DESCRIÇÃO:</strong>
-            <div className="editable-container">
-              <Editable 
-                onEditIncident={handleEditIncident} 
-                id={incident.id} 
-                data={incident.description} 
-                dataType="description" 
-                inputType="textArea"
-              />
-            </div>
-            
-            <strong>VALOR:</strong>
-            <div className="editable-container">
-              <Editable 
-                onEditIncident={handleEditIncident} 
-                id={incident.id} 
-                data={incident.value} 
-                dataType="value" 
-                inputType="input"
-              />
-            </div>
-            
-            <button 
-              className="delete-button" 
-              onClick={() => handleDeleteIncident(incident.id)} 
-              type="button"
-            >
-              <FiTrash2 size={20} color="A8A8B3" />
-            </button>
-          </li>
+          <Incident
+            key={incident.id}
+            incident={incident}
+            handleDeleteIncident={handleDeleteIncident}
+            handleEditIncident={handleEditIncident}
+          />
         ))}
       </ul>
     </div>
