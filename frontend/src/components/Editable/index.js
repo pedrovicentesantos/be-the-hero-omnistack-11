@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-
 import { FiCheck } from 'react-icons/fi';
-
+import useOnClickOutside from '../../hooks/useOnClickOutside';
 import './style.css';
 
-export default function Editable ({ id, data, dataType, inputType, onEditIncident }) {
+export default function Editable ({ id, data, dataType, inputType, onEditIncident, innerRef }) {
   const [editing, setEditing] = useState(false);
   const [editableData, setEditableData] = useState(data);
 
+  useOnClickOutside(innerRef, () => setEditing(false));
+  
   async function handleEdit (e) {
     try {
       await onEditIncident(id, editableData, dataType);
@@ -28,7 +29,6 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
       await handleEdit(e);
     }
   }
-  
 
   if (editing && inputType === 'input') {
     return (
