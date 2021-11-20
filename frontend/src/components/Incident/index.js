@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 import Editable from '../../components/Editable';
+import Modal from '../../components/Modal';
 import './style.css';
 
 const Incident = ({ incident, handleEditIncident,  handleDeleteIncident }) => {
@@ -8,8 +9,20 @@ const Incident = ({ incident, handleEditIncident,  handleDeleteIncident }) => {
   const descriptionRef = useRef();
   const valueRef = useRef();
 
+  const [showModal, setShowModal] = useState(false);
+
+  function hideModal() {
+    setShowModal(false);
+  }
+
   return (
     <li>
+      <Modal
+        showModal={showModal}
+        hideModal={hideModal}
+        incident={incident}
+        handleDelete={handleDeleteIncident}
+      />
       <strong>CASO:</strong>
       <div ref={titleRef} className="editable-container">
         <Editable 
@@ -48,7 +61,7 @@ const Incident = ({ incident, handleEditIncident,  handleDeleteIncident }) => {
       
       <button 
         className="delete-button" 
-        onClick={() => handleDeleteIncident(incident.id)} 
+        onClick={() => setShowModal(true)} 
         type="button"
       >
         <FiTrash2 size={20} color="A8A8B3" />
