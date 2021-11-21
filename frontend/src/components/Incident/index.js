@@ -36,7 +36,7 @@ const Incident = ({ incident, handleEditIncident,  handleDeleteIncident }) => {
       </div>
       
       <strong>DESCRIÇÃO:</strong>
-      <div className="editable-container">
+      <div ref={descriptionRef} className="editable-container">
         <Editable 
           onEditIncident={handleEditIncident} 
           id={incident.id} 
@@ -48,7 +48,7 @@ const Incident = ({ incident, handleEditIncident,  handleDeleteIncident }) => {
       </div>
       
       <strong>VALOR:</strong>
-      <div className="editable-container">
+      <div ref={valueRef} className="editable-container">
         <Editable 
           onEditIncident={handleEditIncident} 
           id={incident.id} 
