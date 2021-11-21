@@ -9,7 +9,7 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
 
   useOnClickOutside(innerRef, () => setEditing(false));
   
-  async function handleEdit (e) {
+  async function handleEdit () {
     try {
       await onEditIncident(id, editableData, dataType);
     } catch (err) {
@@ -30,11 +30,26 @@ export default function Editable ({ id, data, dataType, inputType, onEditInciden
     }
   }
 
-  if (editing && inputType === 'input') {
+  if (editing && dataType === 'title') {
     return (
       <div className="editable-input-block">
         <input
           type="text" 
+          value={editableData}
+          onChange={(e) => {setEditableData(e.target.value)}}
+          onKeyUp={handleKey}
+        />
+
+        <button onClick={handleEdit}>
+          <FiCheck size={20} color="green"/>
+        </button>
+      </div>
+    )
+  } else if (editing && dataType === 'value') {
+    return (
+      <div className="editable-input-block">
+        <input
+          type="number" 
           value={editableData}
           onChange={(e) => {setEditableData(e.target.value)}}
           onKeyUp={handleKey}

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
-
+import CurrencyInput from '../../components/CurrencyInput';
 import api from '../../services/api';
-
 import logoImg from '../../assets/logo.svg';
-
 import './style.css';
 
 export default function NewIncident() {
@@ -40,6 +38,11 @@ export default function NewIncident() {
     }
   }
 
+  function setIncidentValue(e) {
+    // Removes the currency symbol
+    setValue(e.target.value.slice(2));
+  }
+
   return (
     <div className="new-incident-container">
       <div className="content">
@@ -70,13 +73,7 @@ export default function NewIncident() {
             required
           >
           </textarea>
-          <input 
-            type="text" 
-            placeholder="Valor em reais"
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            required
-          />
+          <CurrencyInput handleChange={setIncidentValue} />
 
           <button className="button" type="submit">
             Cadastrar
