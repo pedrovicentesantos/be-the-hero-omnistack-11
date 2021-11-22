@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
-
+import PhoneInput from '../../components/PhoneInput';
 import api from '../../services/api';
-
 import logoImg from '../../assets/logo.svg';
-
 import './style.css';
 
 export default function Register() {
@@ -35,6 +33,7 @@ export default function Register() {
       history.push('/');
 
     } catch (err) {
+      console.log(err);
       alert('Erro no cadastro, tente novamente.');
     }
     
@@ -71,13 +70,7 @@ export default function Register() {
             onChange={e => setEmail(e.target.value)}
             required
           />
-          <input 
-            type="text" 
-            placeholder="Whatsapp"
-            value={whatsapp}
-            onChange={e => setWhatsapp(e.target.value)}
-            required
-          />
+          <PhoneInput handleChange={setWhatsapp} />
 
           <div className="input-group">
             <input 
