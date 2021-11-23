@@ -43,60 +43,77 @@ module.exports = {
   },
 
   async destroy(request, response) {
-    const ong_id = request.headers.authorization;
+    try {
+      const ong_id = request.headers.authorization;
 
-    const ong = await connection('ongs').where('id', ong_id).first();
-    
-    if (ong) {
-
-      const incidents = await connection('incidents')
-      .where('ong_id', ong_id)
-      .delete();
-
-      if (incidents >= 0) {
-        
-        const row = await connection('ongs').where('id', ong_id).delete();
-    
-        if (row > 0) {
-          return response.status(204).send();
-        }
-    
-        return response.status(400).json({ error: 'Error when deleting'});
-      } 
-
-      return response.status(406).json({ error: 'Erro ao deletar os incidentes da ONG' })
-
-    } 
-    
-    return response.status(404).json({ error: 'ONG não existe'});
-
-  },
-
-  async update(request, response) {
-    const ong_id = request.headers.authorization;
-
-    const { name, email, whatsapp, city, uf } = request.body;
-
-    const row = await connection('ongs')
-      .where('id', ong_id)
-      .update( {
-        name,
-        email,
-        whatsapp,
-        city,
-        uf
-      });
-
-    if (row > 0) {
-      const ong = await connection('ongs')
-      .select('*')
-      .where('id', ong_id)
-      .first();
+      const ong = await connection('ongs').where('id', ong_id).first();
+      
       if (ong) {
-        return response.status(200).json(ong);
-      }
-    }
+        const incidents = await connection('incidents')
+        .where('ong_id', ong_id)
+        .delete();
 
-    return response.status(400).json({ error: 'Error when updating'});
+        if (incidents >= 0) {
+          
+          const row = await connection('ongs').where('id', ong_id).delete();
+      
+          if (row > 0) {
+            return response.status(204).send();
+          }
+      
+          return response.status(400).json({ error: 'Error when deleting'});
+        } 
+
+        return response.status(406).json({ error: 'Erro ao deletar os incidentes da ONG' })
+
+      } 
+      
+      return response.status(404).json({ error: 'ONG não existe'}); 
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json({ error: error.message}); 
+    }
+  },
+  
+  async update(request, response) {
+    try {
+      const ong_id = request.headers.authorization;
+      
+      const { name, email, whatsapp, city, uf } = request.body;
+      if (!name && !email && !whatsapp && !city && !uf) {
+        return response.status(400).json({ error: 'Error when updating. Need at least one key'});
+      }
+      const ong = await connection('ongs').where('id', ong_id).first();
+      
+      if (ong) {
+        const row = await connection('ongs')
+        .where('id', ong_id)
+        .update({
+          name,
+          email,
+          whatsapp,
+          city,
+          uf
+        });
+        
+        if (row > 0) {
+          const ong = await connection('ongs')
+          .select('*')
+          .where('id', ong_id)
+          .first();
+          if (ong) {
+            return response.status(200).json(ong);
+          }
+        }
+        
+        return response.status(400).json({ error: 'Error when updating'});
+      } else {
+        return response.status(404).json({ error: 'ONG não existe'}); 
+        
+      }
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json({ error: error.message}); 
+    }
   }
 }

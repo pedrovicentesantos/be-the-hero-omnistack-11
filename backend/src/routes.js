@@ -23,9 +23,22 @@ routes.post('/ongs', celebrate({
     uf: Joi.string().required().length(2),
   })
 }), OngController.create);
-routes.delete('/ongs', OngController.destroy);
+routes.delete('/ongs', celebrate({
+  [Segments.HEADERS]: Joi.object().keys({
+    authorization: Joi.string().required(),
+  })
+}, {allowUnknown: true}), OngController.destroy);
+routes.patch('/ongs', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    name: Joi.string(),
+    email: Joi.string().email(),
+    // +55 (99) 99999-9999
+    whatsapp: Joi.string().length(19),
+    city: Joi.string(),
+    uf: Joi.string().length(2),
+  })
+}), OngController.update);
 
-routes.patch('/ongs', OngController.update);
 routes.get('/self', OngController.show);
 
 routes.get('/profile', celebrate({
