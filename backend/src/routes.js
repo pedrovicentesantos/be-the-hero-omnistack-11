@@ -10,7 +10,11 @@ const routes = express.Router();
 
 // TODO:
 // Validar se o id está sendo enviado
-routes.post('/sessions', SessionController.create);
+routes.post('/sessions', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    id: Joi.string().required(),
+  })
+}), SessionController.create);
 
 routes.get('/ongs', OngController.index);
 routes.post('/ongs', celebrate({
