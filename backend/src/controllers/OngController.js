@@ -11,14 +11,19 @@ module.exports = {
   },
 
   async show (request, response) {
-    const ong_id = request.headers.authorization;
-
-    const ong = await connection('ongs').where('id', ong_id).first();
+    try {
+      const ong_id = request.headers.authorization;
   
-    if (ong) {
-      return response.status(200).json(ong);
+      const ong = await connection('ongs').where('id', ong_id).first();
+    
+      if (ong) {
+        return response.status(200).json(ong);
+      }
+      return response.status(404).json({error: "ONG não existe"});
+    } catch (error) {
+      console.log(error);
+      return response.status(500).json({error: error.message});
     }
-    return response.status(404).json({error: "ONG não existe"});
   },
   
   async create(request,response) {

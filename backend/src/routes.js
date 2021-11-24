@@ -8,8 +8,6 @@ const SessionController = require('./controllers/SessionController');
 
 const routes = express.Router();
 
-// TODO:
-// Validar se o id está sendo enviado
 routes.post('/sessions', celebrate({
   [Segments.BODY]: Joi.object().keys({
     id: Joi.string().required(),
@@ -43,7 +41,11 @@ routes.patch('/ongs', celebrate({
   })
 }), OngController.update);
 
-routes.get('/self', OngController.show);
+routes.get('/self', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.string().required(),
+  }).unknown(),
+}), OngController.show);
 
 routes.get('/profile', celebrate({
   [Segments.HEADERS]: Joi.object({
