@@ -58,16 +58,36 @@ routes.get('/incidents', celebrate({
     page: Joi.number(),
   })
 }), IncidentController.index);
-// TODO:
-// Validar dados enviados
-// Validar header authorization enviado
-routes.post('/incidents', IncidentController.create);
-routes.delete('/incidents/:id', celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    id: Joi.number().required(),
+routes.post('/incidents', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.string().required(),
+  }).unknown(),
+  [Segments.BODY]: Joi.object().keys({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    value: Joi.number().required(),
   })
+}), IncidentController.create);
+routes.delete('/incidents/:id', celebrate({
+  [Segments.PARAMS]: Joi.object({
+    id: Joi.number().required(),
+  }),
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.string().required(),
+  }).unknown()
 }), IncidentController.delete);
-
-routes.patch('/incidents/:id', IncidentController.update);
+routes.patch('/incidents/:id', celebrate({
+  [Segments.PARAMS]: Joi.object({
+    id: Joi.number().required(),
+  }),
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.string().required(),
+  }).unknown(),
+  [Segments.BODY]: Joi.object().keys({
+    title: Joi.string(),
+    description: Joi.string(),
+    value: Joi.number(),
+  })
+}), IncidentController.update);
 
 module.exports = routes;
