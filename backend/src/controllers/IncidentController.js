@@ -4,7 +4,6 @@ module.exports = {
   async index(request,response) {
     try {
       const { page = 1 } = request.query;
-  
       const [count] = await connection('incidents')
         .count();
   
@@ -35,29 +34,40 @@ module.exports = {
       // Guarda infos do contexto da requisição
       // Quem tá autenticado, localização
       const ong_id = request.headers.authorization;
-  
-      const [id] = await connection('incidents').insert({
-        title,
-        description,
-        value,
-        ong_id,
-      });
-  
-      if (id >= 0) {
-        return response.status(200).json({ id });
+
+      const ong = await connection('ongs').where('id', ong_id).first();
+
+      if (ong) {
+        const [id] = await connection('incidents').insert({
+          title,
+          description,
+          value,
+          ong_id,
+        });
+    
+        if (id >= 0) {
+          return response.status(200).json({ id });
+        }
+        return response.status(400).json({error: "Error saving incident"});
       }
-      return response.status(400).json({error: "Error saving incident"});
+      return response.status(404).json({error: "ONG não existe"});
     } catch (error) {
       console.log(error);
       return response.status(500).json({error: error.message});
     }
   },
 
-  async delete(request,response) {
+  async destroy(request,response) {
     try {
       const { id } = request.params;
       const ong_id = request.headers.authorization;
   
+      const ong = await connection('ongs').where('id', ong_id).first();
+
+      if (!ong) {
+        return response.status(404).json({error: "ONG não existe"});
+      }
+
       const incident = await connection('incidents')
         .where('id', id)
         .select('ong_id')
@@ -83,11 +93,15 @@ module.exports = {
     try {
       const { id } = request.params;
       const ong_id = request.headers.authorization;
-
       const { title, description, value } = request.body;
 
       if (!title && !description && !value) {
         return response.status(400).json({ error: 'Error when updating. Need at least one key'});
+      }
+
+      const ong = await connection('ongs').where('id', ong_id).first();
+      if (!ong) {
+        return response.status(404).json({error: "ONG não existe"});
       }
 
       const incident = await connection('incidents')
@@ -110,9 +124,12 @@ module.exports = {
         });
 
       if (row > 0) {
-        return response.status(204).send();
+        const incident = await connection('incidents')
+          .where('id', id)
+          .select('*')
+          .first();
+        return response.status(200).json(incident);
       }
-
       return response.status(400).json({ error: 'Error when updating incident'});
     } catch (error) {
       console.log(error);

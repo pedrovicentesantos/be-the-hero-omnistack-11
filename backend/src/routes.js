@@ -75,7 +75,7 @@ routes.delete('/incidents/:id', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.string().required(),
   }).unknown()
-}), IncidentController.delete);
+}), IncidentController.destroy);
 routes.patch('/incidents/:id', celebrate({
   [Segments.PARAMS]: Joi.object({
     id: Joi.number().required(),
