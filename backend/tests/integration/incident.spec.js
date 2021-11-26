@@ -205,8 +205,6 @@ describe('Incident Controller', () => {
         .send({
           title: "Title",
         });
-      console.log(response.body);
-      console.log(response.status);
       expect(response.body.title).toBe("Title");
     });
   
