@@ -8,6 +8,7 @@ import './style.css';
 
 export default function Profile() {
   const [incidents, setIncidents] = useState([]);
+  const [filter, setFilter] = useState('mais-antigos');
 
   const history = useHistory();
 
@@ -64,10 +65,34 @@ export default function Profile() {
         }
         return incident
       }));
+      filterIncidents[filter]();
 
     } catch (err) {
       alert(err.response.data.error);
     }
+  }
+
+  const filterIncidents = {
+    'mais-recentes': () => {
+      setIncidents(incidents.sort((a, b) => b.id - a.id))
+    },
+    'mais-antigos': () => {
+      setIncidents(incidents.sort((a, b) => a.id - b.id))
+    },
+    'alfabetica': () => {
+      setIncidents(incidents.sort((a, b) => a.title.localeCompare(b.title)))
+    },
+    'maiores-valores': () => {
+      setIncidents(incidents.sort((a, b) => b.value - a.value))
+    },
+    'menores-valores': () => {
+      setIncidents(incidents.sort((a, b) => a.value - b.value))
+    }
+  }
+
+  function handleFilter(e) {
+    setFilter(e.target.value);
+    filterIncidents[e.target.value]();
   }
 
   function handleLogout() {
@@ -90,9 +115,18 @@ export default function Profile() {
         </button>
       </header>
 
-      <h1>Casos Cadastrados</h1>
+      <section className="incidents-header">
+        <h1>Casos Cadastrados</h1>
+        <select value={filter} onChange={handleFilter}>
+          <option value="mais-antigos">Mais Antigos</option>
+          <option value="mais-recentes">Mais Recentes</option>
+          <option value="alfabetica">Ordem Alfabética</option>
+          <option value="maiores-valores">Maiores Valores</option>
+          <option value="menores-valores">Menores Valores</option>
+        </select>
+      </section>
 
-      <ul>
+      <ul className="incidents-container">
         {incidents.map(incident => (
           <Incident
             key={incident.id}
