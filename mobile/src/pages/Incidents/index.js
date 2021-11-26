@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Feather } from '@expo/vector-icons';
-
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { View, FlatList, Image, Text, TouchableOpacity } from 'react-native';
-
+import { Picker } from '@react-native-picker/picker';
 import api from '../../services/api';
-
 import logoImg from '../../assets/logo.png';
-
 import styles from './styles';
 
 export default function Incidents() {
   const navigation = useNavigation();
-
   const [incidents, setIncidents] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState('mais-antigos');
+  const [showFilters, setShowFilters] = useState(false);
 
   function navigateToDetail(incident) {
     navigation.navigate('Detail', { incident });
@@ -45,9 +43,33 @@ export default function Incidents() {
     setLoading(false);
   }
 
+  const filterIncidents = {
+    'mais-recentes': () => {
+      setIncidents(incidents.sort((a, b) => b.id - a.id))
+    },
+    'mais-antigos': () => {
+      setIncidents(incidents.sort((a, b) => a.id - b.id))
+    },
+    'alfabetica': () => {
+      setIncidents(incidents.sort((a, b) => a.title.localeCompare(b.title)))
+    },
+    'maiores-valores': () => {
+      setIncidents(incidents.sort((a, b) => b.value - a.value))
+    },
+    'menores-valores': () => {
+      setIncidents(incidents.sort((a, b) => a.value - b.value))
+    }
+  }
+
+  function handleFilter(filter) {
+    setFilter(filter);
+    filterIncidents[filter]();
+    setShowFilters(false);
+  }
+
   useEffect(() => {
     loadIncidents();
-  }, [])
+  }, []);
   
   return (
     <View style={styles.container}>
@@ -59,7 +81,28 @@ export default function Incidents() {
       </View>
 
       <Text style={styles.title}>Bem vindo!</Text>
-      <Text style={styles.description}>Escolha um dos casos abaixo e salve o dia.</Text>
+      <View style={styles.descriptionContainer}>
+        <Text style={styles.description}>Escolha um dos casos abaixo e salve o dia.</Text>
+        <TouchableOpacity 
+          style={styles.detailsButton}
+          onPress={() => {setShowFilters(!showFilters)}}
+        >
+          <Feather name="filter" size={18} color="#E02041"></Feather>
+        </TouchableOpacity>
+      </View>
+      {showFilters && (
+        <Picker
+          selectedValue={filter}
+          onValueChange={handleFilter}
+          style={styles.picker}
+        >
+          <Picker.Item value="mais-antigos" label="Mais Antigos" />
+          <Picker.Item value="mais-recentes" label="Mais Recentes" />
+          <Picker.Item value="alfabetica" label="Ordem Alfabética" />
+          <Picker.Item value="maiores-valores" label="Maiores Valores" />
+          <Picker.Item value="menores-valores" label="Menores Valores" />
+        </Picker>
+      )}
 
       <FlatList 
         style={styles.incidentList}

@@ -32,8 +32,14 @@ export default StyleSheet.create({
     fontWeight: 'bold'
   },
 
+  descriptionContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
   description: {
-    fontSize: 16,
+    fontSize: 15,
     lineHeight: 24,
     color: '#737380',
   },
@@ -72,5 +78,11 @@ export default StyleSheet.create({
     color:'#e02041',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+
+  picker: {
+    backgroundColor: '#e02041',
+    color: 'white',
+    marginTop: 16
   }
 });
