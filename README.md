@@ -13,8 +13,7 @@ Feita baseada no conteúdo da Semana OmniStack 11.
 - Banco de Dados SQLite para persistir os dados
 - Testes unitários e de integração utilizando Jest e Supertest
 
-## Instalação
-
+## Rodando a aplicação
 Para começar a utilizar o projeto, deve-se clonar o repositório e entrar na pasta do projeto:
 
 ```
@@ -35,3 +34,7 @@ localhost:3000   // Para acessar a interface web
 localhost:3333   // Para se comunicar com o backend
 localhost:19002  // Para acessar o Expo
 ```
+
+## Testes
+
+Os testes implementados são referentes a API criada e para rodá-los, basta acessar a basta do backend e rodar `npm run test`.
